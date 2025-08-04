@@ -24,6 +24,11 @@ else
     echo "User 'manhwa' already exists, skipping creation."
 fi
 
+# === Prepare manhwa folder and download files ===
+mkdir -p /var/www/html/manhwa
+chown manhwa:manhwa /var/www/html/manhwa
+chmod 755 /var/www/html/manhwa
+
 # === Install system dependencies ===
 echo "Updating package list and installing system dependencies..."
 sudo apt update
@@ -49,11 +54,6 @@ if [[ "$install_apache" == "y" ]]; then
     systemctl restart apache2
     echo "Apache installed and configured."
 fi
-
-# === Prepare manhwa folder and download files ===
-mkdir -p /var/www/html/manhwa
-chown manhwa:manhwa /var/www/html/manhwa
-chmod 755 /var/www/html/manhwa
 
 echo "Downloading project files..."
 for file in downloadChapters.py fetchUrls.py update-chapters.txt; do
