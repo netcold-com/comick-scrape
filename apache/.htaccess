@@ -1,5 +1,5 @@
 # Deny specific filenames
-<FilesMatch "^(chapters\.txt|downloaded\.txt|update-chapters\.txt|1\.py|2\.py)$">
+<FilesMatch "^(chapters\.txt|downloaded\.txt|update-chapters\.txt|.*\.py)$">
     Require all denied
 </FilesMatch>
 
