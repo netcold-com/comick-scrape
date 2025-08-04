@@ -50,7 +50,7 @@ fi
 # === Prepare manhwa folder and download files ===
 mkdir -p /var/www/html/manhwa
 chown manhwa:manhwa /var/www/html/manhwa
-chmod 700 /var/www/html/manhwa
+chmod 755 /var/www/html/manhwa
 
 echo "Downloading project files..."
 for file in downloadChapters.py fetchUrls.py update-chapters.txt; do
