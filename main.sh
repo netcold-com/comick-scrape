@@ -78,6 +78,13 @@ for file in downloadChapters.py fetchUrls.py update-chapters.txt; do
     fi
 done
 
+# Now create symlinks for easy access from /home/manhwa
+echo "Creating symlinks in /home/manhwa..."
+for f in downloadChapters.py fetchUrls.py update-chapters.txt; do
+    ln -sf /var/www/html/manhwa/"$f" /home/manhwa/"$f"
+    chown -h manhwa:manhwa /home/manhwa/"$f"
+done
+
 # === Install systemd services and timers if requested ===
 if [[ "$install_services" == "y" ]]; then
     echo "Creating systemd services and timers..."
