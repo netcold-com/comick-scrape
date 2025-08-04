@@ -1,2 +1,3 @@
 # comick-scrape
-Vibe coded comick-scrape lxc pull script
+
+Convert a proxmox lxc into a comick.io archive server
