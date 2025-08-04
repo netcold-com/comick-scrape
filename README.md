@@ -34,11 +34,13 @@ cd /tmp && curl -sSL https://raw.githubusercontent.com/netcold-com/comick-scrape
 
 - You also get the option to create systemd scripts to **automatically update every Sunday at 00:00 UTC**.
 
-- If you need to **run the scripts manually**, you can use these commands:
+- The first manual run might need a couple of tries depending on how many image sources the script finds:
+
+- If you need to **run the scripts manually**, you can use these commands in the **home directory** of `manhwa`
 
     ```bash
-    xvfb-run -a python3 /var/www/html/manhwa/fetchUrls.py
-    xvfb-run -a python3 /var/www/html/manhwa/downloadChapters.py
+    xvfb-run -a python3 fetchUrls.py
+    xvfb-run -a python3 downloadChapters.py
     ```
 
 - Make sure to run the manual commands as the `manhwa` user or with proper permissions
