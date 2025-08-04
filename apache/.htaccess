@@ -1,0 +1,8 @@
+# Deny specific filenames
+<FilesMatch "^(chapters\.txt|downloaded\.txt|update-chapters\.txt|1\.py|2\.py)$">
+    Require all denied
+</FilesMatch>
+
+# Block any directory named "source" at any level
+RewriteEngine On
+RewriteRule (^|/)source(/|$) - [F,L]
