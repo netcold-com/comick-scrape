@@ -140,7 +140,7 @@ echo "Installing Python packages as user 'manhwa'..."
 sudo -u manhwa bash -c '
 export PATH="$HOME/.local/bin:$PATH"
 python3 -m pip install --user --upgrade pip
-python3 -m pip install --user playwright selenium requests 'urllib3<1.27' 'charset_normalizer<3.0.0' 'chardet<5'
+python3 -m pip install --user playwright selenium requests '\''urllib3<1.27'\'' '\''charset_normalizer<3.0.0'\'' '\''chardet<5'\''
 python3 -m playwright install
 '
 
