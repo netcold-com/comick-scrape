@@ -32,16 +32,6 @@ if [[ "$install_apache" == "y" ]]; then
     apt install -y apache2 tree
     a2enmod rewrite
 
-    echo "Configuring Apache for /var/www/html/manhwa..."
-    tee -a /etc/apache2/apache2.conf > /dev/null << 'EOF'
-
-<Directory /var/www/html/manhwa>
-    Options Indexes FollowSymLinks
-    AllowOverride All
-    Require all granted
-</Directory>
-EOF
-
     # Move default index.html if exists
     if [ -f /var/www/html/index.html ]; then
         mv /var/www/html/index.html /var/www/
