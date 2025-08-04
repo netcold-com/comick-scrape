@@ -8,6 +8,9 @@ install_apache=${install_apache,,}
 read -rp "Install systemd services and timers? (y/n) " install_services
 install_services=${install_services,,}
 
+read -rp "Allow others to edit update-chapters.txt? (y/n) " allow_edit
+allow_edit=${allow_edit,,}
+
 echo "Starting setup... This may take a while."
 
 # === Create user 'manhwa' with sudo rights ===
@@ -57,10 +60,7 @@ for file in downloadChapters.py fetchUrls.py update-chapters.txt; do
     curl -o /var/www/html/manhwa/"$file" https://raw.githubusercontent.com/netcold-com/comick-scrape/refs/heads/main/python/"$file"
     chown manhwa:manhwa /var/www/html/manhwa/"$file"
     if [[ "$file" == "update-chapters.txt" ]]; then
-        # Ask about update-chapters.txt permissions
-        read -rp "Allow others to edit update-chapters.txt? (y/n) " allow_edit
-        allow_edit=${allow_edit,,}
-
+        # Set update-chapters.txt permissions based on earlier choice
         if [[ "$allow_edit" == "y" ]]; then
             chmod 666 /var/www/html/manhwa/update-chapters.txt
             echo "Permissions set to allow everyone to read/write update-chapters.txt"
