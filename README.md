@@ -20,7 +20,7 @@ Use at your own risk and feel free to improve or contribute!
 Inside a Proxmox LXC running debian, run the following command to install everything:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/netcold-com/comick-scrape/refs/heads/main/main.sh | sudo bash
+cd /tmp && curl -sSL https://raw.githubusercontent.com/netcold-com/comick-scrape/refs/heads/main/main.sh -o main.sh && sudo bash main.sh
 ```
 ---
 
