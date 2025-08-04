@@ -1,0 +1,2 @@
+# Put the urls of comicks to scrape (example:)
+https://comick.io/comic/04-the-greatest-estate-developer
