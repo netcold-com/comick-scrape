@@ -21,10 +21,14 @@ else
     echo "User 'manhwa' already exists, skipping creation."
 fi
 
+# === Install system dependencies ===
+echo "Updating package list and installing system dependencies..."
+sudo apt update
+sudo apt install -y python3 python3-pip libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libatspi2.0-0 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libcairo2 libpango-1.0-0 libasound2 xvfb tree chromium chromium-driver
+
 # === Apache install/config if requested ===
 if [[ "$install_apache" == "y" ]]; then
     echo "Installing Apache and dependencies..."
-    apt update
     apt install -y apache2 tree
     a2enmod rewrite
 
@@ -141,13 +145,13 @@ EOF
     echo "Systemd services and timers installed and started."
 fi
 
-# === Run Python package installs as manhwa user ===
+# === Install Python packages as manhwa user ===
 echo "Installing Python packages as user 'manhwa'..."
 sudo -u manhwa bash -c '
 export PATH="$HOME/.local/bin:$PATH"
-pip3 install --user playwright selenium
+python3 -m pip install --user --upgrade pip
+python3 -m pip install --user playwright selenium requests urllib3 charset_normalizer chardet
 python3 -m playwright install
-pip3 install --user --upgrade requests urllib3 charset_normalizer chardet
 '
 
 echo "Setup complete! Run 'sudo -i -u manhwa' to switch to the manhwa user shell."
