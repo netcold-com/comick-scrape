@@ -1,2 +1,2 @@
-# Put the urls of comicks to scrape, example:
+# Put the urls of comicks to scrape or comment a line to skip the url, example:
 https://comick.io/comic/04-the-greatest-estate-developer
