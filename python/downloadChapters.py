@@ -31,8 +31,9 @@ def get_comick_images(url, max_attempts=3):
             driver.get(url)
             time.sleep(3)  # Wait for images to load
 
-            imgs = driver.find_elements(By.TAG_NAME, 'img')
-            print(f"    Found {len(imgs)} <img> tags on the page.")
+            # Use CSS selector to exclude Gravatar images from the start
+            imgs = driver.find_elements(By.CSS_SELECTOR, 'img:not([src*="gravatar"])')
+            print(f"    Found {len(imgs)} <img> tags (excluding Gravatar images).")
 
             urls = []
             for img in imgs:
