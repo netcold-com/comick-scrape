@@ -88,7 +88,7 @@ def generate_html(chapter_number, output_dir, image_urls, prev_chap, next_chap, 
     with open(html_path, "w", encoding="utf-8") as f:
         f.write("<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<style>\n")
         f.write("body { background: #000; text-align: center; color: white; font-family: Arial, sans-serif; }\n")
-        f.write("img { width: 100%; max-width: 1000px; margin: 20px auto; display: block; }\n")
+        f.write("img { width: 100%; max-width: 1000px; margin: 0 auto; display: block; }\n")
         f.write("a.button { display: inline-block; padding: 10px 20px; margin: 5px; background: #444; color: white; text-decoration: none; font-size: 1.2em; border-radius: 6px; }\n")
         f.write("a.button:hover { background: #666; }\n")
         f.write(".topnav { display: flex; justify-content: space-between; align-items: center; margin: 10px; }\n")
