@@ -21,6 +21,7 @@ def is_whole_number(chapter_str):
 async def scrape_chapters_for_page(page, url):
     await page.goto(url, timeout=60000)
     await page.wait_for_load_state("networkidle")
+    await page.wait_for_timeout(5000)  # Wait 5 seconds to reduce Cloudflare triggers
 
     previous_scroll_position = -1
     max_attempts = 50
@@ -58,7 +59,6 @@ async def scrape_chapters_for_page(page, url):
     return chapters
 
 async def main():
-    # Read all lines, then skip the first line
     with open(UPDATE_FILE, "r") as f:
         lines = f.readlines()
 
@@ -75,7 +75,17 @@ async def main():
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)  # Change to True for headless
-        context = await browser.new_context()
+
+        context = await browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+            viewport={"width": 1280, "height": 720},
+            locale="en-US",
+            timezone_id="America/New_York",
+            java_script_enabled=True,
+        )
+        await context.add_init_script("""
+            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+        """)
         page = await context.new_page()
 
         for series_url in series_urls:
