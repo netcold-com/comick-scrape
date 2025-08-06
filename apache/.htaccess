@@ -3,6 +3,7 @@
     Require all denied
 </FilesMatch>
 
-# Block any directory named "source" at any level
-RewriteEngine On
-RewriteRule (^|/)source(/|$) - [F,L]
+Options +Indexes
+
+# Ignore any folder named "source" from directory listings
+IndexIgnore source
