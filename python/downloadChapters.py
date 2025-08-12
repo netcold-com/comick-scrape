@@ -31,7 +31,6 @@ def get_comick_images(url, max_attempts=3):
             driver.get(url)
             time.sleep(3)  # Wait for images to load
 
-            # Use CSS selector to exclude Gravatar images from the start
             imgs = driver.find_elements(By.CSS_SELECTOR, 'img:not([src*="secure.gravatar"])')
             print(f"    Found {len(imgs)} <img> tags (excluding Gravatar images).")
 
@@ -39,14 +38,10 @@ def get_comick_images(url, max_attempts=3):
             for img in imgs:
                 src = img.get_attribute('src')
                 if src:
-                    # Print every img src (comment this block out to disable)
-                    # print(f"    IMG SRC: {src}")
-
-                    # Filter only URLs from comick.pictures with valid image extensions
                     if (
                         "comick.pictures" in src.lower()
                         and re.search(r'\.(jpg|jpeg|png|webp)$', src, re.IGNORECASE)
-                        and "meo3" not in src.lower()  # Exclude URLs containing meo3
+                        and "meo3" not in src.lower()
                     ):
                         urls.append(src)
 
@@ -67,15 +62,13 @@ def generate_html(chapter_number, output_dir, image_urls, prev_chap, next_chap, 
     image_dir = os.path.join(output_dir, "source", f"chapter_{chapter_number:03}")
     os.makedirs(image_dir, exist_ok=True)
 
-    # Download images with numbering 01.jpg, 02.jpg, etc.
     for idx, img_url in enumerate(image_urls, start=1):
         img_filename = f"{idx:02}.jpg"
         img_path = os.path.join(image_dir, img_filename)
-        if not os.path.exists(img_path):  # Skip already downloaded images
+        if not os.path.exists(img_path):
             print(f"    Downloading {img_url} -> {img_path}")
             download_image(img_url, img_path)
 
-    # Prepare dropdown for all chapters
     dropdown = '<select onchange="if(this.value) window.location.href=this.value;">\n'
     dropdown += f'<option value="" selected>Jump to chapter</option>\n'
     for num, chap_file in all_chapters:
@@ -83,20 +76,19 @@ def generate_html(chapter_number, output_dir, image_urls, prev_chap, next_chap, 
         dropdown += f'<option value="{chap_file}"{sel}>Chapter {num}</option>\n'
     dropdown += '</select>'
 
-    # Calculate relative path for images
     rel_image_dir = os.path.relpath(image_dir, output_dir)
 
     with open(html_path, "w", encoding="utf-8") as f:
         f.write("<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n<style>\n")
         f.write("body { background: #000; text-align: center; color: white; font-family: Arial, sans-serif; }\n")
         f.write("img { width: 100%; max-width: 1000px; margin: 0 auto; display: block; }\n")
-        f.write("a.button { display: inline-block; padding: 10px 20px; margin: 5px; background: #444; color: white; text-decoration: none; font-size: 1.2em; border-radius: 6px; }\n")
+        # Doubled size: padding, font-size, and horizontal space
+        f.write("a.button { display: inline-block; padding: 30px 60px; margin: 5px; background: #444; color: white; text-decoration: none; font-size: 3em; font-weight: bold; border-radius: 8px; }\n")
         f.write("a.button:hover { background: #666; }\n")
         f.write(".topnav { display: flex; justify-content: space-between; align-items: center; margin: 10px; }\n")
-        f.write("select { font-size: 1.1em; padding: 5px; border-radius: 6px; }\n")
+        f.write("select { font-size: 1.5em; padding: 10px; border-radius: 6px; }\n")
         f.write("</style>\n</head>\n<body>\n")
 
-        # Top navigation bar
         f.write('<div class="topnav">\n')
         if prev_chap:
             f.write(f'<a class="button" href="{prev_chap}">⬅ Previous</a>\n')
@@ -109,12 +101,10 @@ def generate_html(chapter_number, output_dir, image_urls, prev_chap, next_chap, 
             f.write('<span></span>\n')
         f.write("</div>\n<hr>\n")
 
-        # Images
         for idx in range(1, len(image_urls) + 1):
             img_file = f"{idx:02}.jpg"
             f.write(f'<img src="{rel_image_dir}/{img_file}" loading="lazy">\n')
 
-        # Bottom navigation buttons
         f.write("<div class='bottomnav'>\n")
         if prev_chap:
             f.write(f'<a class="button" href="{prev_chap}">⬅ Previous</a>\n')
@@ -147,9 +137,7 @@ def main():
             with open(downloaded_file, "r", encoding="utf-8") as f:
                 downloaded = set(line.strip() for line in f if line.strip())
 
-        all_chapters = []
-        for i, chapter_url in enumerate(chapter_urls, 1):
-            all_chapters.append((i, f"chapter_{i:03}.html"))
+        all_chapters = [(i, f"chapter_{i:03}.html") for i, _ in enumerate(chapter_urls, 1)]
 
         for i, chapter_url in enumerate(chapter_urls, 1):
             chap_id = f"chapter_{i:03}"
@@ -167,7 +155,7 @@ def main():
             next_chap = f"chapter_{i+1:03}.html" if i < len(chapter_urls) else None
 
             try:
-                html_path = generate_html(i, series_path, image_urls, prev_chap, next_chap, all_chapters)
+                generate_html(i, series_path, image_urls, prev_chap, next_chap, all_chapters)
             except Exception as e:
                 print(f"Error generating HTML for {chap_id}: {e}")
                 with open(os.path.join(ROOT_FOLDER, "error.log"), "a", encoding="utf-8") as errf:
